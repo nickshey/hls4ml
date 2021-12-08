@@ -372,7 +372,7 @@ zeropad1d_function_template = 'nnet::zeropad1d_{data_format}<{input_t}, {output_
 zeropad2d_function_template = 'nnet::zeropad2d_{data_format}<{input_t}, {output_t}, {config}>({input}, {output});'
 merge_function_template = 'nnet::{merge}<{input1_t}, {input2_t}, {output_t}, {config}>({input1}, {input2}, {output});'
 resize_function_template = 'nnet::resize_{algorithm}<{input_t}, {config}>({input}, {output});'
-transpose_function_template = 'nnet::transpose_{dim}<{input_t}, {config}>({input}, {output});'
+transpose_function_template = 'nnet::transpose_{dim}<{input_t}, {output_t}, {config}>({input}, {output});'
 garnet_function_template = 'nnet::garnet{impl}<{input_t}, {integer_input_t}, {output_t}, {config}>({input}, {nvtx}, {output});'
 garnet_stack_function_template = 'nnet::garnet_stack<{input_t}, {integer_input_t}, {output_t}, {config}>({input}, {nvtx}, {output});'
 embed_function_template = 'nnet::embedding<{input_t}, {output_t}, {config}>({input}, {output}, {w});'
@@ -388,7 +388,7 @@ pooling_include_list = ['nnet_utils/nnet_pooling.h', 'nnet_utils/nnet_pooling_st
 padding_include_list = ['nnet_utils/nnet_padding.h', 'nnet_utils/nnet_padding_stream.h']
 merge_include_list = ['nnet_utils/nnet_merge.h', 'nnet_utils/nnet_merge_stream.h']
 resize_include_list = ['nnet_utils/nnet_image.h', 'nnet_utils/nnet_image_stream.h']
-transpose_include_list = ['nnet_utils/nnet_array.h']
+transpose_include_list = ['nnet_utils/nnet_array.h', 'nnet_utils/nnet_stream.h']
 garnet_include_list = ['nnet_utils/nnet_garnet.h']
 embed_include_list = ['nnet_utils/nnet_embed.h']
 
