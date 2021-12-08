@@ -64,7 +64,7 @@ if {$opt(reset)} {
 } else {
   open_solution "solution1"
 }
-catch {config_array_partition -maximum_size 4096}
+catch {config_array_partition -maximum_size 8192}
 config_compile -name_max_length 60
 set_part {xcku115-flvb2104-2-i}
 create_clock -period 5 -name default
