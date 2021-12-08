@@ -63,8 +63,8 @@ void conv_1d_latency_cl(
     #pragma HLS ARRAY_PARTITION variable=biases complete dim=0
 
     // Limit multipliers to control parallelization
-    const int multiplier_limit = compute_multiplier_limit<CONFIG_T>(weights);
-    #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
+    //const int multiplier_limit = compute_multiplier_limit<CONFIG_T>(weights);
+    //#pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
 
     // Convolve, saving all multiplication results to accumulate later
     ConvOut: for(int ii = 0; ii < CONFIG_T::out_width; ii++) {
@@ -141,8 +141,8 @@ void pointwise_conv_1d_cl(
     #pragma HLS ARRAY_PARTITION variable=biases complete dim=0
 
     // Limit multipliers to control parallelization
-    const int multiplier_limit = compute_multiplier_limit<CONFIG_T>(weights);
-    #pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
+    //const int multiplier_limit = compute_multiplier_limit<CONFIG_T>(weights);
+    //#pragma HLS ALLOCATION instances=mul limit=multiplier_limit operation
 
     // Convolve, saving all multiplication results to accumulate later
     ConvOut: for(int ii = 0; ii < CONFIG_T::out_width; ii++) {
