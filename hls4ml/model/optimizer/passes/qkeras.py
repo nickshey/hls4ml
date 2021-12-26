@@ -1,4 +1,4 @@
-from hls4ml.model.optimizer import OptimizerPass, node_output_use_mape
+from hls4ml.model.optimizer import OptimizerPass, node_output_use_map
 from hls4ml.model.hls_layers import BatchNormalization
 from hls4ml.model.hls_model import IntegerPrecisionType, FixedPrecisionType, ExponentPrecisionType, register_layer
 from hls4ml.templates import templates
