@@ -44,3 +44,13 @@ def optimize_model(model, passes=None):
             break
         else:
             optimization_done = True
+
+def node_output_use_map(model, node):
+    output_map = {}
+    for output in node.outputs:
+        output_map[output] = []
+        for layer in model.get_layers():
+            for inp in layer.inputs:
+                if output == inp:
+                    output_map[output].append(layer)
+    return output_map

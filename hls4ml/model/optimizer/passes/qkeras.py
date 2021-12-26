@@ -1,4 +1,4 @@
-from hls4ml.model.optimizer import OptimizerPass
+from hls4ml.model.optimizer import OptimizerPass, node_output_use_mape
 from hls4ml.model.hls_layers import BatchNormalization
 from hls4ml.model.hls_model import IntegerPrecisionType, FixedPrecisionType, ExponentPrecisionType, register_layer
 from hls4ml.templates import templates
@@ -209,6 +209,10 @@ class FuseConsecutiveBatchNormalization(OptimizerPass):
     def transform(self, model, node):
         bn0 = node.get_input_node()
         bn1 = node
+        bn0_map = node_output_use_map(model, bn0)
+        bn1_map = node_output_use_map(model, bn1)
+        if len(bn0_map[bn0.name]) > 1 or len(bn1_map[bn1.name]) > 1:
+            return False
 
         s0 = bn0.weights['scale'].data
         b0 = bn0.weights['bias'].data
