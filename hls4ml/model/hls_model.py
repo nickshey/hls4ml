@@ -321,6 +321,9 @@ class HLSModel(object):
         for layer in layer_list:
             kind = layer['class_name']
             name = layer['name']
+            if name == 'input':
+                raise RuntimeError("No model layer should be named 'input' because that is a reserved;" + \
+                                   "layer name in HLSModel; Please rename the layer in your model")
             inputs = layer.get('inputs', [])
             outputs = layer.get('outputs', [])
             if kind in ['InputLayer', 'Input']:
