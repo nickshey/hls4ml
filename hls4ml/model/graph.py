@@ -467,7 +467,8 @@ class ModelGraph(object):
             else:
                 raise Exception('Cannot rewire a node without a parent')
         
-        del self.output_vars[node.outputs[0]]
+        if "batch_normalization" not in node.outputs[0] and "_linear" not in node.outputs[0]:
+            del self.output_vars[node.outputs[0]]
         del self.graph[node.name]
         self._update_model_outputs()
 
