@@ -36,14 +36,15 @@ namespace nnet {
 template<class data_T, class res_T, typename CONFIG_T>
 void linear(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     LinearActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
-        #pragma HLS PIPELINE
+        // #pragma HLS PIPELINE
+        #pragma HLS UNROLL factor=8
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
         LinearPackLoop: for (int j = 0; j < res_T::size; j++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=20
             out_data[j] = in_data[j];
         }
 
@@ -58,7 +59,8 @@ void linear(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 template<class data_T, class res_T, typename CONFIG_T>
 void relu(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     ReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
-        #pragma HLS PIPELINE
+        // #pragma HLS PIPELINE
+        #pragma HLS UNROLL factor=8
 
         data_T in_data = data.read();
         res_T out_data;
@@ -408,14 +410,15 @@ void hard_sigmoid(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 template<class data_T, class res_T, typename CONFIG_T>
 void leaky_relu(hls::stream<data_T> &data, typename data_T::value_type alpha, hls::stream<res_T> &res) {
     LeakyReLUActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
-        #pragma HLS PIPELINE
+        // #pragma HLS PIPELINE
+        #pragma HLS UNROLL factor=8
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
         LeakyReLUPackLoop: for (int j = 0; j < res_T::size; j++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=20
             if (in_data[j] > 0) out_data[j] = in_data[j];
             else out_data[j] = alpha * in_data[j];
         }

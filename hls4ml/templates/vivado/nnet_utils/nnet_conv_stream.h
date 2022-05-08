@@ -281,7 +281,7 @@ void compute_output_buffer_2d(
 
         // Pack output
         CastLoop: for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=2
             res_pack[i_ic] = res_out[i_ic];
         }
 
@@ -351,7 +351,7 @@ void compute_output_buffer_1d(
 
         // Pack output
         CastLoop: for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=2
             res_pack[i_ic] = res_out[i_ic];
         }
 

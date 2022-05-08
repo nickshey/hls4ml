@@ -18,7 +18,7 @@ void compute_scaled_indices_2d(
     unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_chan);
 
     ComputeIndex: for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
-        #pragma HLS UNROLL
+        #pragma HLS UNROLL factor=8
 
         unsigned sw_idx = scale_index<CONFIG_T::filt_width, CONFIG_T::stride_width, CONFIG_T::in_width>(wp_idx + p);
         pixel_idx[p] = CONFIG_T::pixels[sh_idx * CONFIG_T::min_width + sw_idx];
@@ -54,7 +54,8 @@ void conv_2d_encoded_cl(
         ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
             #pragma HLS LOOP_FLATTEN
             if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
-                #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+                // #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+                #pragma HLS UNROLL factor=8
             }
             compute_scaled_indices_2d<data_T, CONFIG_T>(i_ih, i_iw, pixel_idx);
             compute_output_encoded<data_T, res_T, CONFIG_T>(data.read(), data_window, res, res_pack, outputs_ready, weights, biases, pixel_idx);
@@ -79,7 +80,8 @@ void conv_2d_buffer_cl(
         ReadInputWidth: for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
             #pragma HLS LOOP_FLATTEN
             if(CONFIG_T::strategy == nnet::latency) {
-                #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+                // #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+                #pragma HLS UNROLL factor=8
             }
             if (CONFIG_T::filt_height > 1) {
                 compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res, weights, biases);

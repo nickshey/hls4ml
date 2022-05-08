@@ -10,7 +10,7 @@ void fill_zero(hls::stream<res_T> &res) {
     #pragma HLS INLINE
     res_T res_part;
 	for (int c = 0; c < CONFIG_T::n_chan; c++) {
-        #pragma HLS UNROLL
+        #pragma HLS UNROLL factor=8
 	    res_part[c] = 0;
     }
     res.write(res_part);
@@ -22,7 +22,7 @@ void fill_data(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     data_T data_part = data.read();
     res_T res_part;
     for (int c = 0; c < CONFIG_T::n_chan; c++) {
-        #pragma HLS UNROLL
+        #pragma HLS UNROLL factor=8
         res_part[c] = data_part[c];
     }
     res.write(res_part);

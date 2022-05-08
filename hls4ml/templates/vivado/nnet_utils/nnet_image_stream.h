@@ -18,12 +18,13 @@ void resize_nearest(
 	
 	
 	ImageHeight: for (unsigned h = 0; h < CONFIG_T::height; h++) {
-		#pragma HLS PIPELINE
+	  //#pragma HLS PIPELINE
+		#pragma HLS UNROLL factor=2
 	
 		data_T data_in_row[CONFIG_T::width];
 		
 		ImageWidth: for (unsigned i = 0; i < CONFIG_T::width; i++) {
-			#pragma HLS UNROLL
+			#pragma HLS UNROLL factor=2
 			
 			data_T  in_data = image.read();
 			
@@ -35,13 +36,13 @@ void resize_nearest(
 		}
 		
 		ResizeHeight: for (unsigned i = 0; i <ratio_height; i++) {
-			#pragma HLS UNROLL
+			#pragma HLS UNROLL factor=2
 			
 			ImageWidth2: for (unsigned l = 0; l < CONFIG_T::width; l++) {
-				#pragma HLS UNROLL
+				#pragma HLS UNROLL factor=2
 				
 				ResizeWidth: for (unsigned j = 0; j < ratio_width; j++) {
-					#pragma HLS UNROLL
+					#pragma HLS UNROLL factor=2
 				
 					data_T out_data;
 					#pragma HLS DATA_PACK variable=out_data

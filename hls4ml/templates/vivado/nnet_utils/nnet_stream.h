@@ -40,14 +40,15 @@ template<class data_T, class res_T, int N>
 void repack_stream(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     if (data_T::size == res_T::size) {
         for (int i = 0; i < N / data_T::size; i++) {
-            #pragma HLS PIPELINE
+            // #pragma HLS PIPELINE
+            #pragma HLS UNROLL factor=8
 
             data_T in_data = data.read();
             res_T out_data;
             #pragma HLS DATA_PACK variable=out_data
 
             for (int j = 0; j < data_T::size; j++) {
-                #pragma HLS UNROLL
+                #pragma HLS UNROLL factor = 8
                 out_data[j] = in_data[j];
             }
 
@@ -57,7 +58,8 @@ void repack_stream(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         constexpr unsigned pack_diff = data_T::size / res_T::size;
         for (int i = 0; i < N / data_T::size; i++) {
             if (N / data_T::size > 1) {
-                #pragma HLS PIPELINE
+                // #pragma HLS PIPELINE
+                #pragma HLS UNROLL factor=8
             }
 
             data_T in_data = data.read();
@@ -65,11 +67,12 @@ void repack_stream(hls::stream<data_T> &data, hls::stream<res_T> &res) {
             #pragma HLS DATA_PACK variable=out_data
 
             for (int j = 0; j < pack_diff; j++) {
-                #pragma HLS PIPELINE
+                // #pragma HLS PIPELINE
+                #pragma HLS UNROLL factor=8
 
                 res_T out_data;
                 for (int k = 0; k < res_T::size; k++) {
-                    #pragma HLS UNROLL
+                    #pragma HLS UNROLL factor=8
                     out_data[k] = in_data[j * res_T::size + k];
                 }
                 res.write(out_data);
@@ -80,11 +83,12 @@ void repack_stream(hls::stream<data_T> &data, hls::stream<res_T> &res) {
         constexpr unsigned pack_diff = res_T::size / data_T::size;
         unsigned pack_cnt = 0;
         for (int i = 0; i < N / data_T::size; i++) {
-            #pragma HLS PIPELINE
+            // #pragma HLS PIPELINE 
+            #pragma HLS UNROLL factor=8
 
             data_T in_data = data.read();
             for (int j = 0; j < data_T::size; j++) {
-                #pragma HLS UNROLL
+                #pragma HLS UNROLL factor=8
                 out_data[pack_cnt * data_T::size + j] = in_data[j];
             }
 
