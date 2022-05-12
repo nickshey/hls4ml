@@ -354,14 +354,15 @@ void tanh(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     }
 
     TanHActLoop: for (int i = 0; i < CONFIG_T::n_in / res_T::size; i++) {
-        #pragma HLS PIPELINE
+        // #pragma HLS PIPELINE
+        #pragma HLS UNROLL factor=8
 
         data_T in_data = data.read();
         res_T out_data;
         #pragma HLS DATA_PACK variable=out_data
 
         TanHPackLoop: for (int j = 0; j < res_T::size; j++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=8
             int data_round = in_data[j]*CONFIG_T::table_size/8;
             int index = data_round + 4*CONFIG_T::table_size/8;
             if (index < 0)   index = 0;

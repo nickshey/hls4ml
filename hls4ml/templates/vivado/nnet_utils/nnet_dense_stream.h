@@ -18,7 +18,8 @@ void dense_wrapper(
 ) {
     #pragma HLS INLINE region
     if (CONFIG_T::strategy == nnet::latency) {
-        #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+        // #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+        #pragma HLS UNROLL factor=8
         dense_latency<data_T, res_T, CONFIG_T>(data, res, weights, biases);
     } else {
         dense_resource<data_T, res_T, CONFIG_T>(data, res, weights, biases);
@@ -40,11 +41,12 @@ void dense(
 
     DataPrepare: for(int i_in = 0; i_in < CONFIG_T::n_in / data_T::size; i_in++) {
         if (CONFIG_T::n_in / data_T::size > 1) {
-            #pragma HLS PIPELINE
+            // #pragma HLS PIPELINE
+            #pragma HLS UNROLL factor=8
         }
         data_T data_pack = data_stream.read();
         DataPack: for (int i_pack = 0; i_pack < data_T::size; i_pack++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=8
             data[i_in * data_T::size + i_pack] = data_pack[i_pack];
         }
     }
@@ -53,12 +55,13 @@ void dense(
 
     ResWrite: for(unsigned i_out = 0; i_out < CONFIG_T::n_out / res_T::size; i_out++) {
         if (CONFIG_T::n_out / res_T::size > 1) {
-            #pragma HLS PIPELINE
+            // #pragma HLS PIPELINE
+            #pragma HLS UNROLL factor=8
         }
         res_T res_pack;
         #pragma HLS DATA_PACK variable=res_pack
         ResPack: for (int i_pack = 0; i_pack < res_T::size; i_pack++) {
-            #pragma HLS UNROLL
+            #pragma HLS UNROLL factor=8
             res_pack[i_pack] = res[i_out * res_T::size + i_pack];
         }
         res_stream.write(res_pack);
