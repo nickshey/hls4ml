@@ -92,7 +92,8 @@ void pointwise_conv_2d_cl(
             if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
                 #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
             }
-            if (i_ih % CONFIG_T::stride_height == 0 && i_iw % CONFIG_T::stride_width == 0) {
+            // if (i_ih % CONFIG_T::stride_height == 0 && i_iw % CONFIG_T::stride_width == 0) {
+            if (1){
                 pointwise_mult_buffer<data_T, res_T, CONFIG_T>(data.read(), res, weights, biases);
             } else {
                 data.read();
