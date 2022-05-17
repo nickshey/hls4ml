@@ -83,7 +83,8 @@ void pointwise_conv_2d_cl(
 {
     assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
     assert(CONFIG_T::filt_height == 1 && CONFIG_T::filt_width == 1);
-
+    #pragma HLS RESOURCE variable=weights core=XPM_MEMORY uram
+    #pragma HLS RESOURCE variable=biases core=XPM_MEMORY uram
     #pragma HLS ARRAY_PARTITION variable=weights complete
     #pragma HLS ARRAY_PARTITION variable=biases complete
 
@@ -116,6 +117,9 @@ void separable_conv_2d_cl(
     hls::stream<data_T> depthwise_res;
     unsigned res_depth = CONFIG_T::depthwise_config::out_height * CONFIG_T::depthwise_config::out_width;
     #pragma HLS STREAM variable=depthwise_res depth=res_depth
+    #pragma HLS RESOURCE variable=depthwise_res core=XPM_MEMORY uram
+    #pragma HLS RESOURCE variable=depthwise_weights core=XPM_MEMORY uram
+    #pragma HLS RESOURCE variable=pointwise_weights core=XPM_MEMORY uram
 
     switch(CONFIG_T::depthwise_config::implementation){
         case conv_implementation::linebuffer:
