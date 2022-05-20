@@ -187,15 +187,15 @@ void concatenate3d_0(
 {
     ConcatLoopHeight1: for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth1: for (int j = 0; j < CONFIG_T::n_elem1_1; j++) {
-            // #pragma HLS PIPELINE II=1
-            #pragma HLS UNROLL factor=8
+            #pragma HLS PIPELINE II=1
+            #pragma HLS UNROLL factor=32
 
             input1_T in_data1 = data1.read();
             res_T out_data;
             #pragma HLS DATA_PACK variable=out_data
 
             ConcatPackInput1: for (int k = 0; k < input1_T::size; k++) {
-                #pragma HLS UNROLL
+                #pragma HLS UNROLL factor=32
                 out_data[k] = in_data1[k];
             }
 
@@ -205,13 +205,14 @@ void concatenate3d_0(
     ConcatLoopHeight2: for (int i = 0; i < CONFIG_T::n_elem2_0; i++) {
         ConcatLoopWidth2: for (int j = 0; j < CONFIG_T::n_elem2_1; j++) {
             #pragma HLS PIPELINE II=1
+            #pragma HLS UNROLL factor=32
 
             input2_T in_data2 = data2.read();
             res_T out_data;
             #pragma HLS DATA_PACK variable=out_data
 
             ConcatPackInput2: for (int k = 0; k < input2_T::size; k++) {
-                #pragma HLS UNROLL
+                #pragma HLS UNROLL factor=32
                 out_data[k] = in_data2[k];
             }
 
@@ -228,15 +229,15 @@ void concatenate3d_1(
 {
     ConcatLoopHeight: for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth1: for (int j = 0; j < CONFIG_T::n_elem1_1; j++) {
-            // #pragma HLS PIPELINE II=1
-            #pragma HLS UNROLL factor=8
+            #pragma HLS PIPELINE II=1
+            #pragma HLS UNROLL factor=32
 
             input1_T in_data1 = data1.read();
             res_T out_data;
             #pragma HLS DATA_PACK variable=out_data
 
             ConcatPackInput1: for (int k = 0; k < input1_T::size; k++) {
-                #pragma HLS UNROLL factor=8
+                #pragma HLS UNROLL factor=32
                 out_data[k] = in_data1[k];
             }
 
@@ -267,8 +268,8 @@ void concatenate3d_2(
 {
     ConcatLoopHeight: for (int i = 0; i < CONFIG_T::n_elem1_0; i++) {
         ConcatLoopWidth: for (int j = 0; j < CONFIG_T::n_elem1_1; j++) {
-            // #pragma HLS PIPELINE II=1
-            #pragma HLS UNROLL factor=8
+            #pragma HLS PIPELINE II=1
+            #pragma HLS UNROLL factor=32
 
             input1_T in_data1 = data1.read();
             input2_T in_data2 = data2.read();
@@ -281,7 +282,7 @@ void concatenate3d_2(
             }
             
             ConcatPackInput2: for (int k = 0; k < input2_T::size; k++) {
-                #pragma HLS UNROLL factor=8
+                #pragma HLS UNROLL factor=32
                 out_data[input1_T::size + k] = in_data2[k];
             }
 

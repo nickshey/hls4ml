@@ -51,6 +51,10 @@ void dense_latency(
         // #pragma HLS ARRAY_PARTITION variable=weights complete // remove this line for now, it breaks compression sometimes
         #pragma HLS ARRAY_PARTITION variable=biases complete
         // #pragma HLS ARRAY_PARTITION variable=mult complete
+        #pragma HLS RESOURCE variable=weights core=XPM_MEMORY uram
+        #pragma HLS RESOURCE variable=mult core=XPM_MEMORY uram
+        #pragma HLS RESOURCE variable=acc core=XPM_MEMORY uram
+        #pragma HLS RESOURCE variable=biases core=XPM_MEMORY uram
         #pragma HLS ARRAY_PARTITION variable=acc complete
 
         int multiplier_limit  = ceil(float(CONFIG_T::n_in*CONFIG_T::n_out) / float(CONFIG_T::reuse_factor)) - floor(float(CONFIG_T::n_zeros) / float(CONFIG_T::reuse_factor));
@@ -85,7 +89,7 @@ void dense_latency(
     Product1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
         #pragma HLS UNROLL factor=8
         if (CONFIG_T::io_type == io_serial){
-            // #pragma HLS PIPELINE
+            #pragma HLS PIPELINE
             #pragma HLS UNROLL factor=8
         }
         cache = data[ii];
